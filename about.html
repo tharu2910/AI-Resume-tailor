@@ -1,0 +1,56 @@
+<!doctype html>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>About the project | Resume Tailor for Grads</title>
+<link rel="stylesheet" href="style.css">
+<header id="nav" class="nav"></header>
+<main>
+  <h1>About the project</h1>
+  <p class="lead">This site is the prototype from our Design Thinking project on AI-Powered Resume Tailor for Grads. This page summarises the research behind it.</p>
+
+  <h2>Survey results</h2>
+  <p>We asked 27 students (25 second-year, 2 first-year) in October 2026. Because almost everyone is early in college, the results describe early-year students, not final-year job seekers.</p>
+  <div class="tablewrap"><table>
+    <thead><tr><th>Question</th><th>Result</th></tr></thead>
+    <tbody>
+      <tr><td>Hardest part of a resume</td><td>Knowing what companies expect: 16 students (59%). Making it look good: 4 (15%). Writing project details: 3 (11%).</td></tr>
+      <tr><td>Job descriptions hard to understand</td><td>Sometimes 21 (78%), yes 4 (15%), no 2 (7%)</td></tr>
+      <tr><td>Worried about being shortlisted</td><td>Yes 7 (26%), sometimes 14 (52%)</td></tr>
+      <tr><td>Would use a resume-vs-job-description checker</td><td>Yes 13 (48%), maybe 9 (33%), no 5 (19%)</td></tr>
+      <tr><td>Most helpful feature (pick any)</td><td>Improve my resume 59%, improve project descriptions 44%, find missing skills 26%, show resume-job match 26%, check formatting 22%, find keywords 19%</td></tr>
+    </tbody>
+  </table></div>
+
+  <h2>The problem we chose</h2>
+  <p>Early-year college students need a clear way to understand what a job description expects and how their resume compares. Most find job descriptions hard to read, and most worry about being shortlisted.</p>
+
+  <h2>Design Thinking steps</h2>
+  <ol class="steps">
+    <li><b>Empathize.</b> Survey, persona, empathy map and journey map.</li>
+    <li><b>Define.</b> One problem statement and four How Might We questions.</li>
+    <li><b>Ideate.</b> Brainstorming, Six Thinking Hats and assumption testing.</li>
+    <li><b>Prototype.</b> This website: a demo login, a dashboard, the Analyze page, a success screen with Results, and Interview prep. A mock API layer sits between the pages and the matching engine.</li>
+    <li><b>Test.</b> Planned: students try the site and we fix what confuses them.</li>
+  </ol>
+
+  <h2>Similar tools that already exist</h2>
+  <p>Other tools already generate interview questions from a job description and resume, so that feature alone is not new. What we want to test is whether early-year students find plain-language requirements and gap-based talking points more useful.</p>
+  <div class="tablewrap"><table>
+    <thead><tr><th>Tool</th><th>What it does</th></tr></thead>
+    <tbody>
+      <tr><td><a href="https://www.weekday.works/interview-question-predictor">Weekday Interview Question Predictor</a></td><td>Free. Takes a job description and resume and gives 10 likely questions with sample answers.</td></tr>
+      <tr><td><a href="https://airesume.guru/features/ai-mock-interview">AI ResumeGuru mock interview</a></td><td>Asks questions one at a time and targets requirements the resume does not show. Free tier allows one full interview every 30 days.</td></tr>
+      <tr><td><a href="https://www.visualcv.com/blog/best-ai-resume-optimizer-tools/">Jobscan, Teal, Rezi and others</a></td><td>Match resumes to job descriptions and track applications.</td></tr>
+    </tbody>
+  </table></div>
+
+  <h2>Limits of this prototype</h2>
+  <ul class="checklist">
+    <li>It looks for about 60 common skills by matching words. It does not understand meaning.</li>
+    <li>It uses no AI model. The talking points are templates filled in from your gaps.</li>
+    <li>It has not been tested with students yet.</li>
+  </ul>
+</main>
+<footer id="foot"></footer>
+<script src="app.js"></script>
+<script>renderNav("about.html");</script>

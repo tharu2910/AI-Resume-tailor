@@ -1,0 +1,36 @@
+<title>Resume Tailor for Grads</title>
+<link rel="stylesheet" href="style.css">
+<header id="nav" class="nav"></header>
+<main>
+  <h1>Check your resume against a job posting before you apply</h1>
+  <p class="lead">Paste a job posting and your resume. The site explains what the job asks for, shows which skills your resume is missing, and gives you five interview questions to practise for those gaps.</p>
+  <div class="row">
+    <a class="button" id="start" href="login.html">Log in to start</a>
+    <a class="button plain" href="about.html">How we built it</a>
+  </div>
+
+  <h2>Why we made this</h2>
+  <p>We surveyed 27 college students, mostly second-years. Their answers pointed to one problem: they do not know what employers expect.</p>
+  <div class="facts">
+    <div class="fact"><b>59%</b>said knowing what companies expect is the hardest part of a resume</div>
+    <div class="fact"><b>93%</b>find job descriptions hard to understand at least sometimes</div>
+    <div class="fact"><b>78%</b>worry their resume will not be shortlisted</div>
+  </div>
+
+  <h2>How it works</h2>
+  <ol class="steps">
+    <li>Log in with the demo login and open your dashboard.</li>
+    <li>On the Analyze page, paste a job posting and your resume.</li>
+    <li>The Results page lists each requirement in plain words and marks what is missing from your resume.</li>
+    <li>The Interview prep page gives five questions with talking points built from your gaps.</li>
+  </ol>
+  <p class="muted small">The site checks about 60 common skills by matching words, so it can miss a skill written in other words. Everything runs in your browser and nothing is uploaded.</p>
+</main>
+<footer id="foot"></footer>
+<script src="engine.js"></script>
+<script src="mockapi.js"></script>
+<script src="app.js"></script>
+<script>
+renderNav("index.html");
+if(MockAPI.currentUser()){ var s = $("start"); s.textContent = "Go to your dashboard"; s.setAttribute("href", "dashboard.html"); }
+</script>

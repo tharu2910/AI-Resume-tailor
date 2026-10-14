@@ -1,0 +1,38 @@
+<!doctype html>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dashboard | Resume Tailor for Grads</title>
+<link rel="stylesheet" href="style.css">
+<header id="nav" class="nav"></header>
+<main id="content"><p class="muted">Loading your dashboard...</p></main>
+<footer id="foot"></footer>
+<script src="engine.js"></script>
+<script src="mockapi.js"></script>
+<script src="app.js"></script>
+<script>
+renderNav("dashboard.html");
+if(requireLogin()){
+  var user = MockAPI.currentUser();
+  MockAPI.history().then(function(list){
+    var h = "<h1>Hello, " + esc(user.name) + "</h1><p class=\"lead\">Check a resume against a job posting, then practise the interview questions it produces.</p>";
+    h += "<div class=\"row\"><a class=\"button\" href=\"analyze.html\">Start a new analysis</a></div>";
+    h += "<h2>Your recent analyses</h2>";
+    if(!list.length){
+      h += "<p class=\"notice\">You have no analyses yet. Press <b>Start a new analysis</b>, or use the example on that page to see how it works.</p>";
+    } else {
+      var avg = Math.round(list.reduce(function(a, e){ return a + e.score; }, 0) / list.length);
+      h += "<div class=\"facts\"><div class=\"fact\"><b>" + list.length + "</b>analyses saved</div><div class=\"fact\"><b>" + avg + "%</b>average match</div><div class=\"fact\"><b>" + list.reduce(function(a, e){ return a + e.gaps; }, 0) + "</b>gaps to work on</div></div>";
+      h += "<div class=\"tablewrap\"><table><thead><tr><th>Job posting</th><th>Date</th><th>Match</th><th>Gaps</th><th></th></tr></thead><tbody>" + list.map(function(e){
+        return "<tr><td><b>" + esc(e.title) + "</b></td><td>" + esc(fmtDate(e.date)) + "</td><td>" + e.score + "% (" + e.found + " of " + e.total + ")</td><td>" + e.gaps + "</td><td><button class=\"button plain small-btn\" data-id=\"" + esc(e.id) + "\" type=\"button\">Open</button></td></tr>";
+      }).join("") + "</tbody></table></div>";
+      h += "<p class=\"row\"><button class=\"linkbtn\" id=\"clearAll\" type=\"button\">Delete all saved analyses</button></p>";
+    }
+    $("content").innerHTML = h;
+    Array.prototype.forEach.call(document.querySelectorAll("[data-id]"), function(b){
+      b.addEventListener("click", function(){ MockAPI.open(b.getAttribute("data-id")).then(function(){ window.location.href = "results.html"; }); });
+    });
+    var c = $("clearAll");
+    if(c) c.addEventListener("click", function(){ MockAPI.clearHistory().then(function(){ window.location.reload(); }); });
+  });
+}
+</script>

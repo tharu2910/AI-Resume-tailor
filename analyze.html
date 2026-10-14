@@ -1,0 +1,46 @@
+<!doctype html>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Analyze | Resume Tailor for Grads</title>
+<link rel="stylesheet" href="style.css">
+<header id="nav" class="nav"></header>
+<main>
+  <h1>Analyze</h1>
+  <p class="lead">Paste the full job posting on the left and your resume on the right, then press the button.</p>
+  <div class="inputs">
+    <div>
+      <label for="jd">Job posting</label>
+      <textarea id="jd" spellcheck="false" placeholder="Paste the job description here, including the requirements list."></textarea>
+    </div>
+    <div>
+      <label for="resume">Your resume</label>
+      <textarea id="resume" spellcheck="false" placeholder="Paste the text of your resume here."></textarea>
+    </div>
+  </div>
+  <p class="error" id="err" role="alert"></p>
+  <div class="row">
+    <button class="button" id="go" type="button">Analyze and see results</button>
+    <button class="button plain" id="example" type="button">Fill in an example</button>
+    <button class="button plain" id="clear" type="button">Clear both</button>
+  </div>
+</main>
+<footer id="foot"></footer>
+<script src="engine.js"></script>
+<script src="mockapi.js"></script>
+<script src="app.js"></script>
+<script>
+renderNav("analyze.html");
+if(requireLogin()){
+  $("go").addEventListener("click", function(){
+    var btn = $("go"); $("err").textContent = "";
+    btn.disabled = true; btn.textContent = "Analyzing...";
+    MockAPI.analyze($("jd").value, $("resume").value).then(function(){
+      window.location.href = "results.html";
+    }, function(err){
+      $("err").textContent = err.message; btn.disabled = false; btn.textContent = "Analyze and see results";
+    });
+  });
+  $("example").addEventListener("click", function(){ $("jd").value = EXAMPLE_JD; $("resume").value = EXAMPLE_RESUME; $("err").textContent = ""; });
+  $("clear").addEventListener("click", function(){ $("jd").value = ""; $("resume").value = ""; $("err").textContent = ""; });
+}
+</script>

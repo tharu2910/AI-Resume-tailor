@@ -1,0 +1,59 @@
+<!doctype html>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Results | Resume Tailor for Grads</title>
+<link rel="stylesheet" href="style.css">
+<header id="nav" class="nav"></header>
+<main id="content"><p class="muted">Loading your results...</p></main>
+<footer id="foot"></footer>
+<script src="engine.js"></script>
+<script src="mockapi.js"></script>
+<script src="app.js"></script>
+<script>
+renderNav("results.html");
+if(requireLogin()){
+  MockAPI.getCurrent().then(function(data){
+    var box = $("content");
+    if(!data){
+      box.innerHTML = "<h1>Results</h1><p class=\"lead\">There is nothing to show yet.</p><p>Run an analysis first, or open one from your dashboard.</p><div class=\"row\"><a class=\"button\" href=\"analyze.html\">Go to Analyze</a><a class=\"button plain\" href=\"dashboard.html\">Dashboard</a></div>";
+      return;
+    }
+    var r = data.result;
+    var found = {}; r.items.forEach(function(i){ if(i.found) found[i.skill.name] = true; });
+    var gapsN = r.gaps.length, mustGaps = r.gaps.filter(function(g){ return g.priority === "must"; }).length;
+    var row = function(it){
+      return "<tr><td><b>" + esc(it.skill.name) + "</b></td><td>" + (it.priority === "must" ? "Must-have" : "Nice to have") + "</td><td>" + esc(it.skill.what) + "</td><td>" +
+        (it.found ? "<span class=\"tag-found\">On your resume</span>" : "<span class=\"tag-gap\">Missing</span>") + "</td></tr>";
+    };
+    var h = "";
+    if(data.fresh) h += "<div class=\"success\" role=\"status\"><b>Analysis complete.</b> It has been saved to your dashboard. Your interview questions are ready on the next page.</div>";
+    h += "<h1>Results</h1>";
+    h += "<div class=\"score\"><span class=\"num\">" + r.score + "%</span><span>of this posting is covered by your resume</span></div>";
+    h += "<div class=\"bar\" role=\"img\" aria-label=\"" + r.score + " percent match\"><i style=\"width:" + r.score + "%\"></i></div>";
+    h += "<p class=\"muted\">" + (r.items.length - gapsN) + " of " + r.items.length + " requirements found. " + gapsN + " gaps, " + mustGaps + " of them must-have. Must-have requirements count double.</p>";
+    h += "<div class=\"row\"><a class=\"button\" href=\"interview.html\">Next: interview prep</a><a class=\"button plain\" href=\"dashboard.html\">Back to dashboard</a></div>";
+
+    h += "<h2>What the job asks for</h2><p>Each skill in the posting, explained in plain words.</p>";
+    h += "<div class=\"tablewrap\"><table><thead><tr><th>Skill</th><th>Priority</th><th>What it means</th><th>Your resume</th></tr></thead><tbody>" + r.items.map(row).join("") + "</tbody></table></div>";
+    if(r.notes.length) h += r.notes.map(function(n){ return "<p class=\"notice\">" + esc(n) + "</p>"; }).join("");
+
+    h += "<h2>Your gaps and a first step for each</h2>";
+    if(r.gaps.length){
+      h += "<ol class=\"steps\">" + r.gaps.map(function(g){
+        var s = g.skill;
+        return "<li><b>" + esc(s.name) + "</b> (" + (g.priority === "must" ? "must-have" : "nice to have") + "). " + esc(s.start || "Prepare one real example from a project, club or class.") + "</li>";
+      }).join("") + "</ol>";
+    } else { h += "<p>No gaps found. Every skill in the posting appears on your resume.</p>"; }
+
+    h += "<h2>The posting with your skills marked</h2>";
+    h += "<p class=\"small muted\"><mark class=\"m-found\">Green</mark> is on your resume. <mark class=\"m-gap\">Yellow</mark> is missing.</p>";
+    h += "<div class=\"posting\" tabindex=\"0\" aria-label=\"Job posting with skills marked\">" + markup(data.jd, r.jdM, found) + "</div>";
+
+    h += "<h2>Resume check</h2><ul class=\"checklist\">" + r.checks.list.map(function(c){
+      return "<li><b>" + (c.ok ? "OK: " : "Fix: ") + esc(c.t) + ".</b> " + esc(c.d) + "</li>"; }).join("") + "</ul>";
+
+    h += "<div class=\"row\"><a class=\"button\" href=\"interview.html\">Next: interview prep</a></div>";
+    box.innerHTML = h;
+  });
+}
+</script>

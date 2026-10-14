@@ -1,0 +1,34 @@
+<!doctype html>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Interview prep | Resume Tailor for Grads</title>
+<link rel="stylesheet" href="style.css">
+<header id="nav" class="nav"></header>
+<main id="content"><p class="muted">Loading your interview questions...</p></main>
+<footer id="foot"></footer>
+<script src="engine.js"></script>
+<script src="mockapi.js"></script>
+<script src="app.js"></script>
+<script>
+renderNav("interview.html");
+if(requireLogin()){
+  MockAPI.getCurrent().then(function(data){
+    var box = $("content");
+    if(!data){
+      box.innerHTML = "<h1>Interview prep</h1><p class=\"lead\">There is nothing to show yet.</p><p>Run an analysis first, or open one from your dashboard.</p><div class=\"row\"><a class=\"button\" href=\"analyze.html\">Go to Analyze</a><a class=\"button plain\" href=\"dashboard.html\">Dashboard</a></div>";
+      return;
+    }
+    var r = data.result;
+    var kind = { Gap: "Question about a gap", Strength: "Question about a strength", Fit: "Question about the role" };
+    var h = "<h1>Interview prep</h1><p class=\"lead\">Five questions you are likely to be asked for this posting, with points to build your answer from.</p>";
+    h += "<p class=\"notice\">Fill in each [bracket] with a real detail from your own projects or classes. Do not claim a skill you do not have. Saying you are learning it is a good answer.</p>";
+    h += r.questions.map(function(q, i){
+      return "<section class=\"question\"><p class=\"kind\">" + (i + 1) + " of 5. " + esc(kind[q.tag] || "") + "</p><h3>" + esc(q.q) + "</h3><p class=\"why\">" + esc(q.why) + "</p><ul>" +
+        q.points.map(function(p){ return "<li>" + esc(p) + "</li>"; }).join("") + "</ul></section>";
+    }).join("");
+    h += "<div class=\"row\"><button class=\"button\" id=\"copy\" type=\"button\">Copy as text</button><a class=\"button plain\" href=\"results.html\">Back to results</a><a class=\"button plain\" href=\"analyze.html\">Try another posting</a></div><p class=\"status\" id=\"cs\" role=\"status\"></p>";
+    box.innerHTML = h;
+    $("copy").addEventListener("click", function(){ copyText(cheatText(r), "cs"); });
+  });
+}
+</script>
